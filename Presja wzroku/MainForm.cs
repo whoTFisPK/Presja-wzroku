@@ -6,76 +6,56 @@ namespace Presja_wzroku
 {
     public partial class MainForm : Form
     {
-        private PictureBox pbBackground;
-        private int waldoPosX;
-        private int waldoPosY;
-        private const int waldoWidth = 50;  // Szerokoœæ Waldo
-        private const int waldoHeight = 50; // Wysokoœæ Waldo
-        private Random rand;
+        private Panel panelContainer; // Panel do wyœwietlania dynamicznych formularzy
+        private Form activeForm; // Przechowywanie aktualnie otwartego formularza
 
         public MainForm()
         {
             InitializeComponent();
-            this.StartPosition = FormStartPosition.CenterScreen;
-            InitGame();
+            InitializeMainForm();
+
+            // Wyœwietlenie menu na starcie
+            OpenChildForm(new Menu());
         }
 
-        private void InitGame()
+        private void InitializeMainForm()
         {
             // Ustawienia g³ównego okna
-            this.Text = "Presja wzroku";
+            this.Text = "Presja Wzroku";
             this.Size = new Size(1280, 1024);
+            this.StartPosition = FormStartPosition.CenterScreen;
 
-            // Obraz t³a
-            pbBackground = new PictureBox
+            // Inicjalizacja panelu
+            panelContainer = new Panel
             {
-                Image = Properties.Resources.background,
-                SizeMode = PictureBoxSizeMode.StretchImage,
-                Dock = DockStyle.Fill
+                Dock = DockStyle.Fill,
+                BackColor = Color.LightGray // Opcjonalne t³o panelu
             };
-            this.Controls.Add(pbBackground);
 
-            // Ustaw losow¹ pozycjê dla Waldo
-            rand = new Random();
-            ResetGame();
-
-            // Event klikniêcia w t³o
-            pbBackground.MouseDown += PbBackground_MouseDown; // U¿yj MouseDown
+            // Dodanie panelu do g³ównej formy
+            this.Controls.Add(panelContainer);
         }
 
-        private void PbBackground_MouseDown(object sender, MouseEventArgs e)
+        /// <summary>
+        /// Dynamiczne otwieranie formularza wewn¹trz panelu
+        /// </summary>
+        /// <param name="childForm">Formularz do otwarcia</param>
+        public void OpenChildForm(Form childForm)
         {
-            // Debugowanie - wyœwietl klikniête wspó³rzêdne
-            Console.WriteLine($"Clicked at: {e.X}, {e.Y}");
-            Console.WriteLine($"Waldo position: {waldoPosX}, {waldoPosY}");
+            // Zamkniêcie aktualnego formularza, jeœli istnieje
+            if (activeForm != null)
+                activeForm.Close();
 
-            // Sprawdzenie czy gracz klikn¹³ na Waldo
-            if (e.X >= waldoPosX && e.X <= waldoPosX + waldoWidth &&
-                e.Y >= waldoPosY && e.Y <= waldoPosY + waldoHeight)
-            {
-                MessageBox.Show("Gratulacje! Znalaz³eœ Waldo!", "Sukces");
-                // Reset gry
-                ResetGame();
-            }
-            else
-            {
-                MessageBox.Show("Spróbuj jeszcze raz!", "Pud³o");
-            }
-        }
+            activeForm = childForm;
+            childForm.TopLevel = false;
+            childForm.FormBorderStyle = FormBorderStyle.None;
+            childForm.Dock = DockStyle.Fill;
 
-        private void ResetGame()
-        {
-            // Losowanie nowej pozycji dla Waldo
-            waldoPosX = rand.Next(0, pbBackground.Width - waldoWidth);
-            waldoPosY = rand.Next(0, pbBackground.Height - waldoHeight);
-            pbBackground.Invalidate(); // Odœwie¿ t³o, aby zaktualizowaæ ekran
-        }
-
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            base.OnPaint(e);
-            // Rysowanie Waldo na tle
-            e.Graphics.DrawImage(Properties.Resources.waldo, waldoPosX, waldoPosY, waldoWidth, waldoHeight);
+            panelContainer.Controls.Clear(); // Usuñ poprzedni formularz z panelu
+            panelContainer.Controls.Add(childForm); // Dodaj nowy formularz
+            panelContainer.Tag = childForm;
+            childForm.BringToFront();
+            childForm.Show();
         }
     }
 }
