@@ -4,18 +4,18 @@ using System.Windows.Forms;
 
 namespace Presja_wzroku
 {
-    public partial class Poziom1 : Panel
+    public partial class Poziom2 : Panel
     {
         private MainForm parent;
         private PictureBox pbBackground;
         private TimerPanel timerPanel;
 
-        private int waldoPosX = 1066;
-        private int waldoPosY = 699;
-        private const int waldoWidth = 28;
-        private const int waldoHeight = 60;
+        private int waldoPosX = 771;
+        private int waldoPosY = 382;
+        private const int waldoWidth = 20;
+        private const int waldoHeight = 50;
 
-        public Poziom1(MainForm parent)
+        public Poziom2(MainForm parent)
         {
             this.parent = parent;
             InitGame();
@@ -30,7 +30,7 @@ namespace Presja_wzroku
 
             pbBackground = new PictureBox
             {
-                Image = Properties.Resources.background1,
+                Image = Properties.Resources.background2,
                 SizeMode = PictureBoxSizeMode.StretchImage,
                 Dock = DockStyle.Fill
             };
@@ -41,6 +41,8 @@ namespace Presja_wzroku
 
         private void PbBackground_MouseDown(object sender, MouseEventArgs e)
         {
+            //Console.WriteLine($"Clicked at: X={e.X}, Y={e.Y}");
+
             if (e.X >= waldoPosX && e.X <= waldoPosX + waldoWidth &&
                 e.Y >= waldoPosY && e.Y <= waldoPosY + waldoHeight)
             {

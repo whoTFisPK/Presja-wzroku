@@ -63,9 +63,9 @@ namespace Presja_wzroku.Properties {
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap background {
+        internal static System.Drawing.Bitmap background1 {
             get {
-                object obj = ResourceManager.GetObject("background", resourceCulture);
+                object obj = ResourceManager.GetObject("background1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace Presja_wzroku.Properties {
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap waldo {
+        internal static System.Drawing.Bitmap background2 {
             get {
-                object obj = ResourceManager.GetObject("waldo", resourceCulture);
+                object obj = ResourceManager.GetObject("background2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

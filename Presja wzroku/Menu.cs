@@ -1,68 +1,37 @@
 ﻿using Presja_wzroku;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
-namespace Presja_wzroku
+public class Menu : Panel
 {
-    public partial class Menu : Form
+    private MainForm parentForm;
+
+    public Menu(MainForm parent)
     {
-        public Menu()
+        parentForm = parent;
+        InitializeMenu();
+    }
+
+    private void InitializeMenu()
+    {
+        this.BackColor = Color.White;
+        this.Size = new Size(1280, 1024);
+
+        Button btnStartGame = new Button
         {
-            InitializeComponent();
-            InitializeMenu();
-        }
+            Text = "Rozpocznij grę",
+            Size = new Size(200, 50),
+            Location = new Point(500, 200)
+        };
+        btnStartGame.Click += (sender, e) => parentForm.OpenChildPanel(new Poziom1(parentForm));
 
-        private void InitializeMenu()
+        Button btnExit = new Button
         {
-            // Ustawienia menu
-            this.Text = "Menu Główne";
-            this.BackColor = Color.White;
-            this.Size = new Size(1280, 1024);
+            Text = "Wyjdź z gry",
+            Size = new Size(200, 50),
+            Location = new Point(500, 300)
+        };
+        btnExit.Click += (sender, e) => Application.Exit();
 
-            // Przycisk "Rozpocznij grę"
-            Button btnStartGame = new Button
-            {
-                Text = "Rozpocznij grę",
-                Font = new Font("Arial", 16, FontStyle.Bold),
-                Size = new Size(200, 50),
-                Location = new Point((this.ClientSize.Width - 200) / 2, 200),
-                Anchor = AnchorStyles.Top
-            };
-            btnStartGame.Click += BtnStartGame_Click;
-
-            // Przycisk "Wyjdź z gry"
-            Button btnExitGame = new Button
-            {
-                Text = "Wyjdź z gry",
-                Font = new Font("Arial", 16, FontStyle.Bold),
-                Size = new Size(200, 50),
-                Location = new Point((this.ClientSize.Width - 200) / 2, 300),
-                Anchor = AnchorStyles.Top
-            };
-            btnExitGame.Click += BtnExitGame_Click;
-
-            // Dodanie przycisków do formularza
-            this.Controls.Add(btnStartGame);
-            this.Controls.Add(btnExitGame);
-        }
-
-        private void BtnStartGame_Click(object sender, EventArgs e)
-        {
-            // Przejście do gry
-            MainForm mainForm = (MainForm)this.ParentForm;
-            mainForm.OpenChildForm(new Poziom1()); // Otwiera nowy poziom
-        }
-
-        private void BtnExitGame_Click(object sender, EventArgs e)
-        {
-            Application.Exit(); // Zakończenie programu
-        }
+        this.Controls.Add(btnStartGame);
+        this.Controls.Add(btnExit);
     }
 }

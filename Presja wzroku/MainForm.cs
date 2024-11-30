@@ -6,56 +6,38 @@ namespace Presja_wzroku
 {
     public partial class MainForm : Form
     {
-        private Panel panelContainer; // Panel do wyœwietlania dynamicznych formularzy
-        private Form activeForm; // Przechowywanie aktualnie otwartego formularza
-
         public MainForm()
         {
-            InitializeComponent();
             InitializeMainForm();
+            OpenChildForm(new Menu(this));
+        }
 
-            // Wyœwietlenie menu na starcie
-            OpenChildForm(new Menu());
+        public void OpenChildForm(Panel childPanel)
+        {
+            // Usuwanie poprzedniego panelu z kontenera
+            this.Controls.Clear();
+
+            // Dodanie nowego panelu
+            childPanel.Dock = DockStyle.Fill;
+            this.Controls.Add(childPanel);
         }
 
         private void InitializeMainForm()
         {
-            // Ustawienia g³ównego okna
             this.Text = "Presja Wzroku";
             this.Size = new Size(1280, 1024);
-            this.StartPosition = FormStartPosition.CenterScreen;
 
-            // Inicjalizacja panelu
-            panelContainer = new Panel
-            {
-                Dock = DockStyle.Fill,
-                BackColor = Color.LightGray // Opcjonalne t³o panelu
-            };
-
-            // Dodanie panelu do g³ównej formy
-            this.Controls.Add(panelContainer);
+            // Dodanie panelu Menu jako startowego widoku
+            Menu menuPanel = new Menu(this);
+            menuPanel.Dock = DockStyle.Fill;
+            this.Controls.Add(menuPanel);
         }
 
-        /// <summary>
-        /// Dynamiczne otwieranie formularza wewn¹trz panelu
-        /// </summary>
-        /// <param name="childForm">Formularz do otwarcia</param>
-        public void OpenChildForm(Form childForm)
+        public void OpenChildPanel(Control panel)
         {
-            // Zamkniêcie aktualnego formularza, jeœli istnieje
-            if (activeForm != null)
-                activeForm.Close();
-
-            activeForm = childForm;
-            childForm.TopLevel = false;
-            childForm.FormBorderStyle = FormBorderStyle.None;
-            childForm.Dock = DockStyle.Fill;
-
-            panelContainer.Controls.Clear(); // Usuñ poprzedni formularz z panelu
-            panelContainer.Controls.Add(childForm); // Dodaj nowy formularz
-            panelContainer.Tag = childForm;
-            childForm.BringToFront();
-            childForm.Show();
+            this.Controls.Clear(); // Usuniêcie istniej¹cych elementów (np. poprzednich paneli)
+            panel.Dock = DockStyle.Fill;
+            this.Controls.Add(panel);
         }
     }
 }
