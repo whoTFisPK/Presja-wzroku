@@ -6,61 +6,65 @@ namespace Presja_wzroku
 {
     public class TimerPanel : Panel
     {
-        private Label lblTimer;
+        private Label timerLabel;
         private System.Windows.Forms.Timer timer;
-        private int timeLeft; // Pozostały czas w sekundach
+        private int timeLeft;
 
-        public TimerPanel(int countdownTime)
+        public TimerPanel(int seconds)
         {
-            timeLeft = countdownTime;
+            timeLeft = seconds;
             InitializeTimerPanel();
         }
 
         private void InitializeTimerPanel()
         {
-            this.Size = new Size(200, 50);
+            this.Size = new Size(130, 50);
             this.BackColor = Color.LightGray;
-            this.Location = new Point(0, 0);
 
-            lblTimer = new Label
+            this.Padding = new Padding(5);
+            this.BorderStyle = BorderStyle.FixedSingle;
+
+            timerLabel = new Label
             {
-                Text = FormatTime(timeLeft),
+                Text = $"Czas: {timeLeft}s",
                 Font = new Font("Arial", 16, FontStyle.Bold),
-                Dock = DockStyle.Fill,
-                TextAlign = ContentAlignment.MiddleCenter
+                AutoSize = true,
+                Location = new Point(10, 10)
             };
-            this.Controls.Add(lblTimer);
+            this.Controls.Add(timerLabel);
 
-            timer = new System.Windows.Forms.Timer { Interval = 1000 }; // 1000 ms = 1 sekunda
-            timer.Tick += Timer_Tick;
+            timer = new System.Windows.Forms.Timer { Interval = 1000 };
+            timer.Tick += (sender, e) =>
+            {
+                timeLeft--;
+                if (timeLeft <= 0)
+                {
+                    timer.Stop();
+                    MessageBox.Show("Koniec czasu!", "Przegrana");
+                }
+                UpdateLabel();
+            };
+        }
+
+        public void Reset(int seconds)
+        {
+            timer.Stop();
+            timeLeft = seconds;
+            UpdateLabel();
             timer.Start();
         }
 
-        private void Timer_Tick(object sender, EventArgs e)
+        public void Stop()
         {
-            if (timeLeft > 0)
+            if (timer != null)
             {
-                timeLeft--;
-                lblTimer.Text = FormatTime(timeLeft);
-            }
-            else
-            {
-                timer.Stop();
-                OnTimeExpired(); // Wywołanie zdarzenia po zakończeniu odliczania
+                timer.Stop(); // Zatrzymaj timer wewnętrzny
             }
         }
 
-        private string FormatTime(int seconds)
+        private void UpdateLabel()
         {
-            int minutes = seconds / 60;
-            int secs = seconds % 60;
-            return $"{minutes:D2}:{secs:D2}"; // Format MM:SS
-        }
-
-        protected virtual void OnTimeExpired()
-        {
-            MessageBox.Show("Czas się skończył!", "Koniec gry");
-            Application.Exit(); // Zakończenie programu lub przejście na inny ekran
+            timerLabel.Text = $"Czas: {timeLeft}s";
         }
     }
 }

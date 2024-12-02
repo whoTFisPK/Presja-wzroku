@@ -8,7 +8,6 @@ namespace Presja_wzroku
     {
         private MainForm parent;
         private PictureBox pbBackground;
-        private TimerPanel timerPanel;
 
         private int waldoPosX = 771;
         private int waldoPosY = 382;
@@ -19,14 +18,12 @@ namespace Presja_wzroku
         {
             this.parent = parent;
             InitGame();
+            parent.ShowTimer(10); // Pokazanie timera przy rozpoczęciu poziomu
         }
 
         private void InitGame()
         {
             this.Size = new Size(1280, 1024);
-
-            timerPanel = new TimerPanel(10); // Odliczanie 10 sekund
-            this.Controls.Add(timerPanel);
 
             pbBackground = new PictureBox
             {
@@ -41,17 +38,17 @@ namespace Presja_wzroku
 
         private void PbBackground_MouseDown(object sender, MouseEventArgs e)
         {
-            //Console.WriteLine($"Clicked at: X={e.X}, Y={e.Y}");
-
             if (e.X >= waldoPosX && e.X <= waldoPosX + waldoWidth &&
                 e.Y >= waldoPosY && e.Y <= waldoPosY + waldoHeight)
             {
+                parent.StopTimer(); // Zatrzymanie timera
                 MessageBox.Show("Gratulacje! Znalazłeś Waldo!", "Sukces");
-                parent.OpenChildForm(new Poziom2(parent));
+                parent.OpenChildForm(new Menu(parent)); // Powrót do menu lub kolejny poziom
             }
             else
             {
                 MessageBox.Show("Spróbuj jeszcze raz!", "Pudło");
+                parent.LoseLife(); // Gracz traci życie
             }
         }
     }
