@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Media;
 
 namespace Presja_wzroku
 {
@@ -19,7 +20,10 @@ namespace Presja_wzroku
             this.parent = parent;
             InitGame();
             parent.ShowTimer(10); // Pokazanie timera przy rozpoczęciu poziomu
-            parent.ShowHearts(3); // Wyświetl 3 życia
+            parent.ShowHearts(); // Wyświetl 3 życia
+
+            // Wymuszenie fokusu na MainForm
+            parent.ActiveControl = null;
         }
 
         private void InitGame()
@@ -42,13 +46,22 @@ namespace Presja_wzroku
             if (e.X >= waldoPosX && e.X <= waldoPosX + waldoWidth &&
                 e.Y >= waldoPosY && e.Y <= waldoPosY + waldoHeight)
             {
+
+                // Odtwarzanie dźwięku
+                SoundPlayer player = new SoundPlayer(Properties.Resources.dobrze);  // successSound.wav w zasobach
+                player.Play();
+
                 parent.StopTimer(); // Zatrzymanie timera
                 MessageBox.Show("Gratulacje! Znalazłeś Waldo!", "Sukces");
+
                 parent.OpenChildForm(new Poziom2(parent)); // Przejście do kolejnego poziomu
             }
             else
             {
-                MessageBox.Show("Spróbuj jeszcze raz!", "Pudło");
+                // Odtwarzanie dźwięku
+                SoundPlayer player = new SoundPlayer(Properties.Resources.zle);  // successSound.wav w zasobach
+                player.Play();
+
                 parent.LoseLife(); // Gracz traci życie
             }
         }

@@ -81,6 +81,15 @@ namespace Presja_wzroku.Properties {
         }
         
         /// <summary>
+        ///   Wyszukuje zlokalizowany zasób typu System.IO.UnmanagedMemoryStream podobny do zasobu System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream dobrze {
+            get {
+                return ResourceManager.GetStream("dobrze", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Serce_b {
@@ -97,6 +106,15 @@ namespace Presja_wzroku.Properties {
             get {
                 object obj = ResourceManager.GetObject("Serce_c", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Wyszukuje zlokalizowany zasób typu System.IO.UnmanagedMemoryStream podobny do zasobu System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream zle {
+            get {
+                return ResourceManager.GetStream("zle", resourceCulture);
             }
         }
     }

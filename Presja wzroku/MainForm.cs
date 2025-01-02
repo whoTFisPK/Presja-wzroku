@@ -1,6 +1,9 @@
 using System;
+using System.IO;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace Presja_wzroku
 {
@@ -9,6 +12,8 @@ namespace Presja_wzroku
         private TimerPanel timerPanel;
         private HeartsPanel heartsPanel;
         private Panel currentChildPanel;
+        private int currentLives = 3; // Tutaj dodajemy zmienn¹ dla ¿yæ
+        private List<string> techniki; // Lista przechowuj¹ca linie z pliku Techniki.txt
 
         public MainForm()
         {
@@ -17,12 +22,6 @@ namespace Presja_wzroku
 
             this.StartPosition = FormStartPosition.CenterScreen;
 
-            timerPanel = new TimerPanel(10)
-            {
-                Visible = false // Domyœlnie ukrywamy timer
-            };
-            this.Controls.Add(timerPanel);
-
             heartsPanel = new HeartsPanel(3) // 3 ¿ycia domyœlnie
             {
                 Visible = false, // Domyœlnie ukrywamy panel serc
@@ -30,12 +29,42 @@ namespace Presja_wzroku
             };
             this.Controls.Add(heartsPanel);
 
+
+            timerPanel = new TimerPanel(10)
+            {
+                Visible = false // Domyœlnie ukrywamy timer
+            };
+            this.Controls.Add(timerPanel);
+
+
             OpenChildForm(new Menu(this));
+
+            // Ustawienie nas³uchiwania na klawisze
+            this.KeyPreview = true;
+            this.KeyDown += MainForm_KeyDown;
+
+            ZaladujTechniki(); // £adowanie technik
         }
 
-        public void ShowHearts(int totalLives)
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
-            heartsPanel.ResetLives(totalLives);
+            if (e.KeyCode == Keys.P)
+            {
+                // Zatrzymaj i ukryj timer
+                StopTimer();
+                HideTimer();
+
+                // Ukryj serca
+                HideHearts();
+
+                // Przejœcie do menu
+                OpenChildForm(new Menu(this));
+            }
+        }
+
+        public void ShowHearts()
+        {
+            heartsPanel.ResetLives(currentLives);
             heartsPanel.Visible = true;
         }
 
@@ -46,7 +75,21 @@ namespace Presja_wzroku
 
         public void LoseLife()
         {
-            heartsPanel.LoseLife();
+            if (currentLives > 0)
+            {
+                currentLives--;
+                heartsPanel.LoseLife();
+            }
+
+            if (currentLives == 0)
+            {
+                StopTimer(); // Zatrzymaj timer
+                HideTimer();
+                HideHearts();
+                MessageBox.Show("Koniec gry! Brak ¿yæ.", "Przegrana");
+                PokazLosowaTechnika(); // Wyœwietlenie losowej techniki 
+                OpenChildForm(new Menu(this)); // Powrót do menu
+            }
         }
 
         public void OpenChildForm(Panel childPanel)
@@ -62,7 +105,14 @@ namespace Presja_wzroku
             childPanel.Dock = DockStyle.Fill;
             this.Controls.Add(childPanel);
 
-            // Upewniamy siê, ¿e timer jest na wierzchu
+            // Reset ¿ycia tylko przy przejœciu do menu
+            if (childPanel is Menu)
+            {
+                currentLives = 3;
+            }
+
+            // Upewniamy siê, ¿e timer i ¿ycia jest na wierzchu
+            heartsPanel.BringToFront();
             timerPanel.BringToFront();
         }
 
@@ -80,6 +130,35 @@ namespace Presja_wzroku
         public void StopTimer()
         {
             timerPanel.Stop();
+        }
+
+        private void ZaladujTechniki()
+        {
+            techniki = new List<string>();
+
+            try
+            {
+                // Œcie¿ka do pliku Techniki.txt
+                string[] lines = File.ReadAllLines("Techniki.txt");
+
+                // Dodajemy ka¿d¹ liniê z pliku do listy
+                techniki.AddRange(lines);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("B³¹d wczytywania pliku: " + ex.Message);
+            }
+        }
+
+        // Metoda, która wyœwietla losow¹ liniê z pliku
+        public void PokazLosowaTechnika()
+        {
+            Random rand = new Random();
+            int index = rand.Next(techniki.Count); // Losowanie indeksu z zakresu liczby linii
+            string randomLine = techniki[index];  // Pobranie losowej linii
+
+            // Wyœwietlenie losowej linii (np. w oknie dialogowym)
+            MessageBox.Show(randomLine, "Nic siê nie sta³o! Nastêpnym razem spróbuj tego!");
         }
     }
 }
