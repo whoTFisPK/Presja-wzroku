@@ -30,7 +30,7 @@ namespace Presja_wzroku
             this.Controls.Add(heartsPanel);
 
 
-            timerPanel = new TimerPanel(10)
+            timerPanel = new TimerPanel(10, this)
             {
                 Visible = false // Domyœlnie ukrywamy timer
             };

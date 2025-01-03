@@ -92,6 +92,16 @@ namespace Presja_wzroku.Properties {
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap MENU {
+            get {
+                object obj = ResourceManager.GetObject("MENU", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Wyszukuje zlokalizowany zasób typu System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Serce_b {
             get {
                 object obj = ResourceManager.GetObject("Serce_b", resourceCulture);

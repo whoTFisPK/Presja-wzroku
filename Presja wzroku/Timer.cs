@@ -10,10 +10,12 @@ namespace Presja_wzroku
         private Label timerLabel;
         private System.Windows.Forms.Timer timer;
         private int timeLeft;
+        private MainForm parentForm;
 
-        public TimerPanel(int seconds)
+        public TimerPanel(int seconds, MainForm parent)
         {
             timeLeft = seconds;
+            parentForm = parent;
             InitializeTimerPanel();
         }
 
@@ -42,6 +44,7 @@ namespace Presja_wzroku
                 {
                     timer.Stop();
                     MessageBox.Show("Koniec czasu!", "Przegrana");
+                    parentForm.OpenChildForm(new Menu(parentForm));
                 }
                 UpdateLabel();
             };
