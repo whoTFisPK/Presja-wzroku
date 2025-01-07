@@ -1,15 +1,8 @@
-﻿using System;
-using System.Drawing;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
-
-namespace Presja_wzroku
+﻿namespace Presja_wzroku
 {
     public class Menu : Panel
     {
         private MainForm parentForm;
-        private TimerPanel timerPanel;
-        private HeartsPanel heartsPanel;
 
         public Menu(MainForm parent)
         {
@@ -22,23 +15,38 @@ namespace Presja_wzroku
             this.BackColor = Color.White;
             this.Size = new Size(1280, 1024);
 
-            // Ustawiamy obraz z zasobów jako tło panelu
-            this.BackgroundImage = Properties.Resources.MENU; // Plik MENU.png w zasobach
-            this.BackgroundImageLayout = ImageLayout.Stretch; // Dopasowanie do rozmiaru panelu
+            /** Ustawiamy obraz z zasobów jako tło panelu */
+            this.BackgroundImage = Properties.Resources.MENU;
+            /** Dopasowanie do rozmiaru */
+            this.BackgroundImageLayout = ImageLayout.Stretch; 
 
             Button btnStartGame = new Button
             {
                 Text = "ROZPOCZNIJ GRĘ",
                 Size = new Size(500, 100),
                 Location = new Point(375, 318),
-                BackColor = Color.LightBlue, // Tło przycisku
-                ForeColor = Color.DarkBlue, // Kolor tekstu
-                Font = new Font("Arial", 14, FontStyle.Bold), // Czcionka tekstu
-                FlatStyle = FlatStyle.Flat, // Styl przycisku
+                BackColor = Color.LightBlue, 
+                ForeColor = Color.DarkBlue,
+                Font = new Font("Arial", 14, FontStyle.Bold),
+                FlatStyle = FlatStyle.Flat,
             };
+            //btnStartGame.MouseEnter += (s, e) => btnStartGame.BackColor = Color.DarkBlue; <---Hover
+            //btnStartGame.MouseLeave += (s, e) => btnStartGame.BackColor = Color.LightBlue; <---Hover
+            //btnStartGame.MouseEnter += (s, e) => btnStartGame.Size = new Size(520, 120); <---Powiększanie hover
+            //btnStartGame.MouseLeave += (s, e) => btnStartGame.Size = new Size(500, 100); <---Powiększanie hover
             btnStartGame.Click += (sender, e) =>
             {
-                parentForm.OpenChildForm(new Poziom1(parentForm));
+                MessageBox.Show("Witaj w grze PRESJA WZROKU!\n\n" +
+                                "Twoim zadaniem jest znalezienie Waldo zanim upłynie czas. Szukając go pamiętaj o jego znakach rozpoznawczych: biało-czerwony sweter w " +
+                                "paski, biało-czerwona czapka z pomponem oraz okulary. Czasami ma ze sobą rónież swój duży plecak podróżniczy ;)\n\n" +
+                                "Gdy już znajdziesz Waldo naciśnij na niego LPM (Lewym Przyciskiem Myszy). Pamiętaj, że możesz pomylić się tylko 3 razy oraz, że możesz w " +
+                                "dowolnym momencie przerwać rozgrywkę i wrócić do menu za pomocą klawisz P na klawiaturze\n\n" +
+                                "POWODZENIA!", "Instrukcja");
+
+                /** Tworzymy instancję konkretnego poziomu, np. Poziom1 */
+                BaseLevel level = new Tutorial(parentForm);
+                /** Otwórz poziom w formularzu głównym */
+                parentForm.OpenChildForm(level);  
             };
 
             Button btnExit = new Button
@@ -46,10 +54,10 @@ namespace Presja_wzroku
                 Text = "WYJDŹ Z GRY",
                 Size = new Size(500, 100),
                 Location = new Point(375, 512),
-                BackColor = Color.LightBlue, // Tło przycisku
-                ForeColor = Color.DarkBlue, // Kolor tekstu
-                Font = new Font("Arial", 14, FontStyle.Bold), // Czcionka tekstu
-                FlatStyle = FlatStyle.Flat, // Styl przycisku   
+                BackColor = Color.LightBlue,
+                ForeColor = Color.DarkBlue,
+                Font = new Font("Arial", 14, FontStyle.Bold),
+                FlatStyle = FlatStyle.Flat,  
             };
             btnExit.Click += (sender, e) => Application.Exit();
 

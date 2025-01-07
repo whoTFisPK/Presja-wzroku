@@ -81,6 +81,26 @@ namespace Presja_wzroku.Properties {
         }
         
         /// <summary>
+        ///   Wyszukuje zlokalizowany zasób typu System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap background3 {
+            get {
+                object obj = ResourceManager.GetObject("background3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Wyszukuje zlokalizowany zasób typu System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap background4 {
+            get {
+                object obj = ResourceManager.GetObject("background4", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.IO.UnmanagedMemoryStream podobny do zasobu System.IO.MemoryStream.
         /// </summary>
         internal static System.IO.UnmanagedMemoryStream dobrze {
@@ -115,6 +135,16 @@ namespace Presja_wzroku.Properties {
         internal static System.Drawing.Bitmap Serce_c {
             get {
                 object obj = ResourceManager.GetObject("Serce_c", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Wyszukuje zlokalizowany zasób typu System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Tutorial {
+            get {
+                object obj = ResourceManager.GetObject("Tutorial", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

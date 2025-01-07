@@ -9,11 +9,17 @@ namespace Presja_wzroku
 {
     public partial class MainForm : Form
     {
-        private TimerPanel timerPanel;
+        /** Panel wyœwietlaj¹cy timer, u¿ywane do odliczania czasu */
+        public TimerPanel timerPanel;
+        /** Panel wyœwietlaj¹cy serca, u¿ywane do œledzenia ¿ycia gracza */
         private HeartsPanel heartsPanel;
+        /** Aktualnie aktywny panel (np. g³ówny panel gry) */
         private Panel currentChildPanel;
-        private int currentLives = 3; // Tutaj dodajemy zmienn¹ dla ¿yæ
-        private List<string> techniki; // Lista przechowuj¹ca linie z pliku Techniki.txt
+        /** Zmienna przechowuj¹ca liczbê ¿yæ gracza */
+        private int currentLives = 3;
+        /** Lista przechowuj¹ca linie z pliku Techniki.txt */
+        private List<string> techniki;
+
 
         public MainForm()
         {
@@ -22,96 +28,109 @@ namespace Presja_wzroku
 
             this.StartPosition = FormStartPosition.CenterScreen;
 
-            heartsPanel = new HeartsPanel(3) // 3 ¿ycia domyœlnie
+            /** 3 ¿ycia domyœlnie */
+            heartsPanel = new HeartsPanel(3) 
             {
-                Visible = false, // Domyœlnie ukrywamy panel serc
-                Location = new Point(1050, 10) // W prawym górnym rogu
+                /** Domyœlnie ukrywamy panel serc */
+                Visible = false,
+                /** W prawym górnym rogu */
+                Location = new Point(1050, 10) 
             };
             this.Controls.Add(heartsPanel);
 
 
             timerPanel = new TimerPanel(10, this)
             {
-                Visible = false // Domyœlnie ukrywamy timer
+                /** Domyœlnie ukrywamy timer */
+                Visible = false 
             };
             this.Controls.Add(timerPanel);
 
 
             OpenChildForm(new Menu(this));
 
-            // Ustawienie nas³uchiwania na klawisze
+            /** Ustawienie nas³uchiwania na klawisze */
             this.KeyPreview = true;
             this.KeyDown += MainForm_KeyDown;
 
-            ZaladujTechniki(); // £adowanie technik
+            /** £adowanie technik */
+            ZaladujTechniki(); 
         }
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.P)
             {
-                // Zatrzymaj i ukryj timer
-                StopTimer();
-                HideTimer();
+                /** Zatrzymaj i ukryj timer */
+                timerPanel.Stop();
+                timerPanel.Visible = false;
 
-                // Ukryj serca
-                HideHearts();
+                /** Ukryj serca */
+                heartsPanel.Visible = false;
 
-                // Przejœcie do menu
+                /** Przejœcie do menu */
                 OpenChildForm(new Menu(this));
             }
         }
 
         public void ShowHearts()
         {
+            /** Resetowanie liczby ¿yæ w panelu serca na wartoœæ currentLives */
             heartsPanel.ResetLives(currentLives);
+            /** Ustawienie widocznoœci panelu serca na true */
             heartsPanel.Visible = true;
-        }
-
-        public void HideHearts()
-        {
-            heartsPanel.Visible = false;
         }
 
         public void LoseLife()
         {
+            /** Sprawdzenie, czy gracz ma jeszcze ¿ycia */
             if (currentLives > 0)
             {
+                /** Zmniejszenie liczby ¿yæ o 1 */
                 currentLives--;
+                /** Aktualizacja panelu z sercami, aby odzwierciedliæ utratê ¿ycia */
                 heartsPanel.LoseLife();
             }
 
+            /** Sprawdzenie, czy gracz straci³ wszystkie ¿ycia */
             if (currentLives == 0)
             {
-                StopTimer(); // Zatrzymaj timer
-                HideTimer();
-                HideHearts();
+                /** Zatrzymanie timera */
+                timerPanel.Stop();
+                /** Ukrycie panelu timera */
+                timerPanel.Visible = false;
+                /** Ukrycie panelu serc */
+                heartsPanel.Visible = false;
+                /** Wyœwietlenie komunikatu o przegranej */
                 MessageBox.Show("Koniec gry! Brak ¿yæ.", "Przegrana");
-                PokazLosowaTechnika(); // Wyœwietlenie losowej techniki 
-                OpenChildForm(new Menu(this)); // Powrót do menu
+                /** Wyœwietlenie losowej techniki */
+                PokazLosowaTechnika();
+                /** Powrót do menu */
+                OpenChildForm(new Menu(this));
             }
         }
 
+
         public void OpenChildForm(Panel childPanel)
         {
-            // Usuwamy poprzedni panel
+            /** Usuwamy poprzedni panel */
             if (currentChildPanel != null)
             {
                 this.Controls.Remove(currentChildPanel);
             }
 
-            // Dodajemy nowy panel
+            /** Dodajemy nowy panel */
             currentChildPanel = childPanel;
             childPanel.Dock = DockStyle.Fill;
             this.Controls.Add(childPanel);
 
-            // Reset ¿ycia tylko przy przejœciu do menu
+            /** Reset ¿ycia tylko przy przejœciu do menu */
             if (childPanel is Menu)
             {
                 currentLives = 3;
             }
 
-            // Upewniamy siê, ¿e timer i ¿ycia jest na wierzchu
+            /** Upewniamy siê, ¿e timer i ¿ycia jest na wierzchu */
             heartsPanel.BringToFront();
             timerPanel.BringToFront();
         }
@@ -122,26 +141,16 @@ namespace Presja_wzroku
             timerPanel.Visible = true;
         }
 
-        public void HideTimer()
-        {
-            timerPanel.Visible = false;
-        }
-
-        public void StopTimer()
-        {
-            timerPanel.Stop();
-        }
-
         private void ZaladujTechniki()
         {
             techniki = new List<string>();
 
             try
             {
-                // Œcie¿ka do pliku Techniki.txt
+                /** Œcie¿ka do pliku Techniki.txt */
                 string[] lines = File.ReadAllLines("Techniki.txt");
 
-                // Dodajemy ka¿d¹ liniê z pliku do listy
+                /** Dodajemy ka¿d¹ liniê z pliku do listy */
                 techniki.AddRange(lines);
             }
             catch (Exception ex)
@@ -150,15 +159,17 @@ namespace Presja_wzroku
             }
         }
 
-        // Metoda, która wyœwietla losow¹ liniê z pliku
+        /** Metoda, która wyœwietla losow¹ liniê z pliku */
         public void PokazLosowaTechnika()
         {
             Random rand = new Random();
-            int index = rand.Next(techniki.Count); // Losowanie indeksu z zakresu liczby linii
-            string randomLine = techniki[index];  // Pobranie losowej linii
+            /** Losowanie indeksu z zakresu liczby linii */
+            int index = rand.Next(techniki.Count);
+            /** Pobranie losowej linii */
+            string randomLine = techniki[index];
 
-            // Wyœwietlenie losowej linii (np. w oknie dialogowym)
-            MessageBox.Show(randomLine, "Nic siê nie sta³o! Nastêpnym razem spróbuj tego!");
+            /** Wyœwietlenie losowej linii (np. w oknie dialogowym) */
+            MessageBox.Show(randomLine, "Spróbuj tej techniki!");
         }
     }
 }

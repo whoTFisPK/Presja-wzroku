@@ -1,66 +1,23 @@
-﻿using System;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Media;
-
-namespace Presja_wzroku
+﻿namespace Presja_wzroku
 {
-    public partial class Poziom2 : Panel
+    public partial class Poziom2 : BaseLevel
     {
-        private MainForm parent;
-        private PictureBox pbBackground;
+        protected override int WaldoPosX => 771;
+        protected override int WaldoPosY => 382;
+        protected override int WaldoWidth => 20;
+        protected override int WaldoHeight => 50;
+        protected override string BackgroundImageResource => "background2"; 
 
-        private int waldoPosX = 771;
-        private int waldoPosY = 382;
-        private const int waldoWidth = 20;
-        private const int waldoHeight = 50;
+        public Poziom2(MainForm parent) : base(parent) { }
 
-        public Poziom2(MainForm parent)
+        protected override void StartGame()
         {
-            this.parent = parent;
-            InitGame();
-            parent.ShowTimer(10);
-            parent.ShowHearts();
+            parent.ShowTimer(30); 
         }
 
-        private void InitGame()
+        protected override Panel NextLevel()
         {
-            this.Size = new Size(1280, 1024);
-
-            pbBackground = new PictureBox
-            {
-                Image = Properties.Resources.background2,
-                SizeMode = PictureBoxSizeMode.StretchImage,
-                Dock = DockStyle.Fill
-            };
-            this.Controls.Add(pbBackground);
-
-            pbBackground.MouseDown += PbBackground_MouseDown;
-        }
-
-        private void PbBackground_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.X >= waldoPosX && e.X <= waldoPosX + waldoWidth &&
-                e.Y >= waldoPosY && e.Y <= waldoPosY + waldoHeight)
-            {
-
-                // Odtwarzanie dźwięku
-                SoundPlayer player = new SoundPlayer(Properties.Resources.dobrze);  // successSound.wav w zasobach
-                player.Play();
-
-                parent.StopTimer(); // Zatrzymanie timera
-                MessageBox.Show("Gratulacje! Znalazłeś Waldo!", "Sukces");
-
-                parent.OpenChildForm(new Poziom2(parent)); // Przejście do kolejnego poziomu
-            }
-            else
-            {
-                // Odtwarzanie dźwięku
-                SoundPlayer player = new SoundPlayer(Properties.Resources.zle);  // successSound.wav w zasobach
-                player.Play();
-
-                parent.LoseLife(); // Gracz traci życie
-            }
+            return new Poziom3(parent); 
         }
     }
 }

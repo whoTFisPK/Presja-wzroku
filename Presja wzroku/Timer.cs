@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace Presja_wzroku
 {
@@ -29,25 +28,36 @@ namespace Presja_wzroku
 
             timerLabel = new Label
             {
-                Text = $"Czas: {timeLeft}s",
+                Text = $"Czas: {timeLeft}",
                 Font = new Font("Arial", 16, FontStyle.Bold),
                 AutoSize = true,
-                Location = new Point(10, 10)
+                Location = new Point(10, 10),
             };
             this.Controls.Add(timerLabel);
 
             timer = new System.Windows.Forms.Timer { Interval = 1000 };
-            timer.Tick += (sender, e) =>
+            timer.Tick += Timer_Tick;
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            timeLeft--;
+            if (timeLeft <= 0)
             {
-                timeLeft--;
-                if (timeLeft <= 0)
-                {
-                    timer.Stop();
-                    MessageBox.Show("Koniec czasu!", "Przegrana");
-                    parentForm.OpenChildForm(new Menu(parentForm));
-                }
+                EndTimer();
+            }
+            else
+            {
                 UpdateLabel();
-            };
+            }
+        }
+
+        private void EndTimer()
+        {
+            timer.Stop();
+            MessageBox.Show("Koniec czasu!", "Przegrana");
+            this.Visible = false;
+            parentForm.OpenChildForm(new Menu(parentForm));
         }
 
         public void Reset(int seconds)
@@ -62,13 +72,13 @@ namespace Presja_wzroku
         {
             if (timer != null)
             {
-                timer.Stop(); // Zatrzymaj timer wewnętrzny
+                timer.Stop();
             }
         }
 
         private void UpdateLabel()
         {
-            timerLabel.Text = $"Czas: {timeLeft}s";
+            timerLabel.Text = $"Czas: {timeLeft}";
         }
     }
 }

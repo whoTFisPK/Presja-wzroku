@@ -14,13 +14,13 @@ namespace Presja_wzroku
             currentLives = totalLives;
             InitializeHearts(totalLives);
 
-            this.BackColor = Color.Transparent; // Ustaw tło na przezroczyste
+            this.BackColor = Color.Transparent; 
             this.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
         }
 
         private void InitializeHearts(int totalLives)
         {
-            this.Size = new Size(200, 60); // Rozmiar panelu na serca
+            this.Size = new Size(200, 60); 
 
             hearts = new PictureBox[totalLives];
             int heartWidth = 50;
@@ -30,11 +30,12 @@ namespace Presja_wzroku
             {
                 hearts[i] = new PictureBox
                 {
-                    Image = Properties.Resources.Serce_c, // Domyślnie pełne serce
+                    /** Domyślnie pełne serce */
+                    Image = Properties.Resources.Serce_c, 
                     SizeMode = PictureBoxSizeMode.StretchImage,
                     Size = new Size(heartWidth, heartWidth),
                     Location = new Point(i * (heartWidth + spacing), 0),
-                    BackColor = Color.Transparent // Tło obrazków serc również przezroczyste
+                    BackColor = Color.Transparent 
                 };
                 this.Controls.Add(hearts[i]);
             }
@@ -45,7 +46,8 @@ namespace Presja_wzroku
             if (currentLives > 0)
             {
                 currentLives--;
-                hearts[currentLives].Image = Properties.Resources.Serce_b; // Puste serce
+                /** Puste serce */
+                hearts[currentLives].Image = Properties.Resources.Serce_b; 
             }
         }
 
@@ -53,19 +55,20 @@ namespace Presja_wzroku
         {
             currentLives = totalLives;
 
-            // Przejdź przez wszystkie serca i ustaw ich grafikę
+            /** Przejdź przez wszystkie serca i ustaw ich grafikę */
             for (int i = 0; i < hearts.Length; i++)
             {
                 if (i < currentLives)
                 {
-                    hearts[i].Image = Properties.Resources.Serce_c; // Pełne serce
+                    /** Pełne serce */
+                    hearts[i].Image = Properties.Resources.Serce_c; 
                 }
                 else
                 {
-                    hearts[i].Image = Properties.Resources.Serce_b; // Puste serce
+                    /** Puste serce */
+                    hearts[i].Image = Properties.Resources.Serce_b; 
                 }
             }
         }
-
     }
 }
